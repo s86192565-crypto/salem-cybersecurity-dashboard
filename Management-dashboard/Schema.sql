@@ -198,9 +198,7 @@ INSERT INTO Remediation VALUES
 (6865, 5466, 2342, '2024-06-03', 'Refined Application Workflow & State Verification'),  
 (6423, 5442, 2342, '2024-08-08', 'Implemented Server-Side Input Validation with Strict Whitelisting'),
 (6762, 5324, 2678, '2025-03-06', 'Implemented AES-256 Encryption for Sensitive Data at Rest'),
-(6109, 5343, 2678, '2026-03-07', 'Implemented Parameterized Queries (PreparedStatement) and Regular Security Audits'),
-(6189, 5343, 2678, '2026-03-07', 'Implemented Parameterized Queries (PreparedStatement) and Regular Security Audits');
-;
+(6109, 5343, 2678, '2026-03-07', 'Implemented Parameterized Queries (PreparedStatement) and Regular Security Audits');
 
 SELECT* FROM Management;
 SELECT* FROM Department;
