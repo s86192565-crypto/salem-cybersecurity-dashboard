@@ -1,4 +1,4 @@
-```markdown
+markdown
 # Salem Cybersecurity – Full-Stack Dashboard
 
 A full-stack web application designed to visualize the **vulnerability remediation lifecycle** of a fictional cybersecurity company, Salem. 
@@ -27,7 +27,7 @@ Cybersecurity companies need to track which team fixed which vulnerability, how 
 
 The backend is powered by a relational database (`Salem_Cybersecurity_Company`) containing **9 interlinked tables**. 
 
-```mermaid
+mermaid
 erDiagram
     Management ||--o{ Department : manages
     Department ||--o{ Team_and_difficultys : has
