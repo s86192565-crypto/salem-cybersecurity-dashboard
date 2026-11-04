@@ -1,19 +1,23 @@
+```markdown
 # Salem Cybersecurity – Full-Stack Dashboard
 
 A full-stack web application designed to visualize the **vulnerability remediation lifecycle** of a fictional cybersecurity company, Salem. 
 
 This project bridges a relational **MySQL** database with a **Python (Flask)** backend and a dynamic **Vanilla JavaScript** frontend. It proves that complex data can be fetched, filtered, and rendered seamlessly without heavy frameworks.
 
-> **Project type:** Academic / Personal Portfolio Project
-> **Tech Stack:** Python (Flask), MySQL, HTML5, CSS3, Vanilla JavaScript
+> **Project type:** Academic / Personal Portfolio Project  
+> **Tech Stack:** Python (Flask), MySQL, HTML5, CSS3, Vanilla JavaScript  
 > **Author:** Ali Abdulrahman Alghamdi
 
 ---
 
 ## 📌 Project Overview
+
 Cybersecurity companies need to track which team fixed which vulnerability, how severe it was, and what method was used. This dashboard provides a live, interactive view of that data.
 
 ![Dashboard Preview](dashboard.png)
+
+> **Note:** All data (including company names, employee records, vulnerabilities, and payroll) is entirely fictional and used for demonstration purposes only.
 
 **Key Features:**
 - **Relational Database:** A fully normalized MySQL schema with 9 tables, foreign keys, and CHECK constraints.
@@ -28,7 +32,7 @@ Cybersecurity companies need to track which team fixed which vulnerability, how 
 
 The backend is powered by a relational database (`Salem_Cybersecurity_Company`) containing **9 interlinked tables**. 
 
-mermaid
+```mermaid
 erDiagram
     Management ||--o{ Department : manages
     Department ||--o{ Team_and_difficultys : has
@@ -125,6 +129,7 @@ http://127.0.0.1:5000
 
 ## 👤 Author
 
-**Ali Abdulrahman Alghamdi**
-AI Diploma Student – Al-Baha University
+**Ali Abdulrahman Alghamdi**  
+AI Diploma Student – Al-Baha University  
 📧 s86192565@gmail.com
+```
