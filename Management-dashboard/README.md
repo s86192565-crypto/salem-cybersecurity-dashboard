@@ -1,35 +1,87 @@
+[README.md](https://github.com/user-attachments/files/34388989/README.md)
 # Salem Cybersecurity – Full-Stack Dashboard
 
-A full-stack web application designed to visualize the **vulnerability remediation lifecycle** of a fictional cybersecurity company, Salem. 
+A small full-stack web application that shows the **vulnerability remediation lifecycle** of a fictional cybersecurity company, **Salem**: which vulnerability was found at which client, how severe it was, which team fixed it, and how.
 
-This project bridges a relational **MySQL** database with a **Python (Flask)** backend and a dynamic **Vanilla JavaScript** frontend. It proves that complex data can be fetched, filtered, and rendered seamlessly without heavy frameworks.
+The project connects a **MySQL** database to a **Python (Flask)** backend that serves JSON, and a **vanilla JavaScript** frontend that loads and filters the data in the browser, with no frontend frameworks.
 
-> **Project type:** Academic / Personal Portfolio Project  
-> **Tech Stack:** Python (Flask), MySQL, HTML5, CSS3, Vanilla JavaScript  
-> **Author:** Ali Abdulrahman Alghamdi
-
----
-
-## 📌 Project Overview
-
-Cybersecurity companies need to track which team fixed which vulnerability, how severe it was, and what method was used. This dashboard provides a live, interactive view of that data.
+> **Project type:** Academic / personal portfolio project
+> **Tech stack:** Python (Flask), MySQL, HTML, CSS, JavaScript
+> **Author:** Ali Abdulrahman Alghamdi – AI Diploma student, Al-Baha University
 
 ![Dashboard Preview](dashboard.png)
 
-> **Note:** All data (including company names, employee records, vulnerabilities, and payroll) is entirely fictional and used for demonstration purposes only.
-
-**Key Features:**
-- **Relational Database:** A fully normalized MySQL schema with 9 tables, foreign keys, and CHECK constraints.
-- **REST API:** A lightweight Flask server that acts as a bridge, fetching data from MySQL and serving it as JSON.
-- **Dynamic Frontend:** Uses JavaScript `fetch` API to pull data asynchronously.
-- **Client-Side Filtering:** Users can instantly filter vulnerabilities by severity (Critical, High, Medium, Low) without reloading the page.
-- **Responsive UI:** Clean, modern design with built-in Dark Mode support using CSS variables.
+> **Note:** All data in this project (companies, employees, vulnerabilities, payroll, IDs) is fictional and used for demonstration only.
 
 ---
 
-## 🗺️ Database Architecture
+## 📌 Features
 
-The backend is powered by a relational database (`Salem_Cybersecurity_Company`) containing **9 interlinked tables**. 
+- **Relational database:** 9 related MySQL tables with primary/foreign keys and `NOT NULL`, `CHECK`, and `ENUM` constraints.
+- **REST endpoint:** A Flask route that runs a multi-table `JOIN` query and returns the result as JSON.
+- **Dynamic frontend:** JavaScript `fetch` loads the data asynchronously and builds the table without reloading the page.
+- **Client-side filtering:** Filter vulnerabilities by severity (Critical, High, Medium, Low) with one click.
+- **Responsive design with automatic dark/light mode:** CSS variables and `prefers-color-scheme`.
+- **Credentials kept out of the code:** Database settings are loaded from a `.env` file that is not committed.
+
+---
+
+## 🧱 How It Works
+
+```
+Browser (HTML + CSS + JavaScript)
+        │  fetch("/api/vulnerabilities")
+        ▼
+Flask server (app.py)
+        │  SQL query (JOIN across 4 tables)
+        ▼
+MySQL database (Salem_Cybersecurity_Company)
+```
+
+1. The browser opens `/`, and Flask serves `static/index.html`.
+2. `script.js` requests `/api/vulnerabilities`.
+3. Flask connects to MySQL, runs the query, and returns the rows as JSON.
+4. JavaScript renders the rows as a table and handles the severity filter buttons.
+
+### API Endpoint
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/` | Serves the dashboard page |
+| GET | `/api/vulnerabilities` | Returns all vulnerabilities with their client, severity, fixing team, and fix method |
+
+Example response (one item):
+
+```json
+{
+  "client": "Amazon",
+  "vulnerability": "SQL Injection",
+  "severity": "High",
+  "team": "Team fahed",
+  "method": "Implemented Parameterized Queries (PreparedStatement) and Regular Security Audits"
+}
+```
+
+The query behind it:
+
+```sql
+SELECT c.Company_Name AS client,
+       v.Vuln_Name    AS vulnerability,
+       v.Severity     AS severity,
+       t.Team_Name    AS team,
+       r.Fix_Method   AS method
+FROM Vulnerabilities v
+JOIN Clients c ON v.commercial_register_id = c.commercial_register_id
+JOIN Remediation r ON v.Vuln_ID = r.Vuln_ID
+JOIN Team_and_difficultys t ON r.Team_ID = t.Team_ID
+ORDER BY t.Team_Name;
+```
+
+---
+
+## 🗺️ Database Design
+
+The database `Salem_Cybersecurity_Company` has **9 related tables**.
 
 ```mermaid
 erDiagram
@@ -44,90 +96,132 @@ erDiagram
     Team_and_difficultys ||--o{ Remediation : performs
 ```
 
-**Key SQL Feature:** To optimize dashboard performance, the `Team_and_difficultys` table is updated using an advanced `UPDATE + JOIN + Subquery` statement to pre-calculate vulnerability counts by severity for each team.
+| Table | Purpose |
+|-------|---------|
+| `Management` | Company managers |
+| `Department` | Departments (Network Security, Application Security, Data Security, Law, Accounting) |
+| `Team_and_difficultys` | Technical teams, with stored counts of vulnerabilities by severity |
+| `Clients` | Client companies and their industry |
+| `Employees` | Employees, their department, and optional team |
+| `Payroll` | Monthly salary records |
+| `Contracts` | Contracts signed with clients |
+| `Vulnerabilities` | Vulnerabilities found at clients (with an `ENUM` severity) |
+| `Remediation` | How, when, and by which team each vulnerability was fixed |
 
----
+### Constraints used
 
-## 🛠️ Tech Stack
+| Constraint | Example |
+|-----------|---------|
+| `PRIMARY KEY` / `FOREIGN KEY` | Every table; links such as `Remediation.Vuln_ID → Vulnerabilities` |
+| `NOT NULL` | Names, dates, salaries, severity, fix method |
+| `CHECK` | `Contracts`: `End_Date >= Start_Date` |
+| `ENUM` | `Vulnerabilities.Severity`: `'Low'`, `'Medium'`, `'High'`, `'Critical'` |
+| `AUTO_INCREMENT` | `Payroll.Payroll_ID` |
+| `DECIMAL(10,2)` / `BIGINT` | Salaries; commercial register numbers |
 
-- **Backend:** Python 3, Flask, `mysql-connector-python`, `python-dotenv`
-- **Database:** MySQL
-- **Frontend:** HTML5, CSS3 (Flexbox/Grid, Dark Mode), Vanilla JavaScript (ES6, Fetch API)
+### SQL concepts practiced
+
+`SELECT`, `JOIN`, subqueries, `COUNT` / `SUM`, `ORDER BY`, `LIKE`, `UPDATE`.
+
+A summary table of vulnerability counts per team (`Team_and_difficultys`) is maintained with an `UPDATE + JOIN + subquery` statement in `Schema.sql`. The dashboard itself reads vulnerability details directly through the `JOIN` query shown above.
 
 ---
 
 ## 📁 Repository Structure
 
 ```text
-├── app.py                 # Flask server, API endpoints, and DB connection
-├── Schema.sql             # Database creation, tables, and sample data
-├── requirements.txt       # Python dependencies
-├── .env.example           # Template for environment variables
-├── README.md              # Project documentation
+├── app.py              # Flask server, API route, and database connection
+├── Schema.sql          # Database creation, tables, sample data, and queries
+├── requirements.txt    # Python dependencies
+├── .env.example        # Template for environment variables
+├── .gitignore          # Keeps .env out of the repository
+├── dashboard.png       # Screenshot used in this README
 └── static/
-    ├── index.html         # Frontend structure
-    ├── style.css          # Styling and responsive design
-    └── script.js          # Frontend logic (fetching and filtering)
+    ├── index.html      # Page structure
+    ├── style.css       # Styling, responsive layout, dark mode
+    └── script.js       # Fetching, rendering, and filtering
 ```
 
 ---
 
-## 🚀 How to Run Locally
+## 🚀 Run It Locally
 
-Follow these steps to get the project running on your machine.
+**Requirements:** Python 3, MySQL, and MySQL Workbench (or any MySQL client).
 
-### 1. Database Setup
-1. Open **MySQL Workbench** (or your preferred MySQL client).
-2. Open the `Schema.sql` file provided in this repository.
-3. Execute the entire script. This will automatically create the database, build the 9 tables, insert the sample data, and run the analytical queries.
+### 1. Create the database
+Open `Schema.sql` in MySQL Workbench and run the whole script. It creates the database, the 9 tables, and the sample data.
 
-### 2. Environment Variables Setup
-1. Duplicate the `.env.example` file and rename the copy to `.env`.
-2. Open `.env` and fill in your local MySQL credentials:
-   ```env
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=your_mysql_password
-   DB_NAME=Salem_Cybersecurity_Company
-   ```
+> ⚠️ The script starts with `DROP DATABASE IF EXISTS`, so it deletes any existing database with the same name.
 
-### 3. Backend Setup (Flask)
-1. Open your terminal in the project directory.
-2. Create and activate a virtual environment (optional but recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
-   ```
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Start the Flask server:
-   ```bash
-   python app.py
-   ```
+### 2. Create a read-only database user (recommended)
+The dashboard only reads data, so it does not need full access. Run this in MySQL with your own password:
 
-### 4. Access the Dashboard
-Open your web browser and navigate to:
+```sql
+CREATE USER 'dashboard'@'localhost' IDENTIFIED BY 'choose_a_strong_password';
+GRANT SELECT ON Salem_Cybersecurity_Company.* TO 'dashboard'@'localhost';
+```
+
+### 3. Configure environment variables
+Copy `.env.example` to `.env` and fill in your values:
+
+```env
+DB_HOST=localhost
+DB_USER=dashboard
+DB_PASSWORD=choose_a_strong_password
+DB_NAME=Salem_Cybersecurity_Company
+```
+
+The `.env` file is listed in `.gitignore` and must never be committed.
+
+### 4. Install dependencies and start the server
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+### 5. Open the dashboard
+
 ```text
 http://127.0.0.1:5000
 ```
 
+### Troubleshooting
+
+| Error | Likely cause |
+|-------|--------------|
+| `Access denied for user` | Wrong user or password in `.env` |
+| `Can't connect to MySQL server` | MySQL service is not running |
+| `Unknown database` | `Schema.sql` was not run |
+| `ModuleNotFoundError` | Dependencies not installed (`pip install -r requirements.txt`) |
+| Empty table, no error | Open the browser console (F12) to see JavaScript errors |
+
 ---
 
-## 🧠 What I Learned & Demonstrated
+## 🧠 What I Learned
 
-1. **Database Design:** Creating a 3NF relational database with complex relationships and data integrity constraints (`NOT NULL`, `CHECK`, `ENUM`).
-2. **Advanced SQL:** Writing multi-table `JOIN` queries and using correlated subqueries to keep summary tables updated.
-3. **Backend API Development:** Building secure RESTful endpoints using Flask and handling environment variables via `.env`.
-4. **Asynchronous JavaScript:** Using the `fetch` API to request JSON data without reloading the page.
-5. **DOM Manipulation:** Dynamically building HTML tables and implementing client-side filtering using array methods (`filter`, `map`).
-6. **Modern CSS:** Implementing CSS Variables for theming and `prefers-color-scheme` for automatic Dark Mode.
+- Designing a relational database and enforcing data integrity with constraints
+- Writing `JOIN` queries and subqueries to answer real questions from related tables
+- Connecting Python to MySQL and exposing data through a Flask JSON endpoint
+- Keeping credentials in environment variables and using a read-only database user
+- Using `fetch`, array methods (`filter`, `map`), and DOM updates in vanilla JavaScript
+- Using CSS variables and `prefers-color-scheme` for responsive, themeable styling
+- Debugging connection, configuration, and data errors across three layers (database, backend, browser)
+
+---
+
+## 🚀 Possible Improvements
+
+- Show an error message in the page if the API request fails
+- Escape data before inserting it into the page (to avoid HTML injection if data ever comes from users)
+- Add more endpoints (summary counts per team, payroll totals) and charts
+- Add search and sorting to the table
+- Move the Flask app to a production server and deploy it online
 
 ---
 
 ## 👤 Author
 
-**Ali Abdulrahman Alghamdi**  
-AI Diploma Student – Al-Baha University  
+**Ali Abdulrahman Alghamdi**
+AI Diploma Student – Al-Baha University
 📧 s86192565@gmail.com
