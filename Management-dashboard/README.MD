@@ -1,4 +1,3 @@
-```markdown
 # Salem Cybersecurity – Full-Stack Dashboard
 
 A full-stack web application designed to visualize the **vulnerability remediation lifecycle** of a fictional cybersecurity company, Salem. 
