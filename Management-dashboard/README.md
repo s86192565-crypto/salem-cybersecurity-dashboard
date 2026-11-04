@@ -131,4 +131,3 @@ http://127.0.0.1:5000
 **Ali Abdulrahman Alghamdi**  
 AI Diploma Student – Al-Baha University  
 📧 s86192565@gmail.com
-```
