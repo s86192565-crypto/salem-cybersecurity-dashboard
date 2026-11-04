@@ -12,7 +12,7 @@ This project bridges a relational **MySQL** database with a **Python (Flask)** b
 ---
 
 ## 📌 Project Overview
-
+![Dashboard Preview](dashboard.png)
 Cybersecurity companies need to track which team fixed which vulnerability, how severe it was, and what method was used. This dashboard provides a live, interactive view of that data.
 
 **Key Features:**
