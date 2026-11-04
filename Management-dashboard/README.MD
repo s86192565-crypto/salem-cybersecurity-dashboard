@@ -1,4 +1,3 @@
-markdown
 # Salem Cybersecurity – Full-Stack Dashboard
 
 A full-stack web application designed to visualize the **vulnerability remediation lifecycle** of a fictional cybersecurity company, Salem. 
@@ -13,7 +12,9 @@ This project bridges a relational **MySQL** database with a **Python (Flask)** b
 
 ## 📌 Project Overview
 Cybersecurity companies need to track which team fixed which vulnerability, how severe it was, and what method was used. This dashboard provides a live, interactive view of that data.
+
 ![Dashboard Preview](dashboard.png)
+
 **Key Features:**
 - **Relational Database:** A fully normalized MySQL schema with 9 tables, foreign keys, and CHECK constraints.
 - **REST API:** A lightweight Flask server that acts as a bridge, fetching data from MySQL and serving it as JSON.
