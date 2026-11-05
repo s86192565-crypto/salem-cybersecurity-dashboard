@@ -134,7 +134,6 @@ A summary table of vulnerability counts per team (`Team_and_difficultys`) is mai
 ├── Schema.sql          # Database creation, tables, sample data, and queries
 ├── requirements.txt    # Python dependencies
 ├── .env.example        # Template for environment variables
-├── .gitignore          # Keeps .env out of the repository
 ├── dashboard.png       # Screenshot used in this README
 └── static/
     ├── index.html      # Page structure
